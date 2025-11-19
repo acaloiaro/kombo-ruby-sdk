@@ -1,0 +1,9 @@
+# Ignore automation files so the generator doesn't overwrite them
+.github/
+scripts/
+README.md
+.gitignore
+.openapi-generator-ignore
+VERSION
+api_specs/
+new_openapi.json
