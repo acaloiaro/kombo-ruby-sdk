@@ -66,6 +66,7 @@
             # tools
             svu
             openapi-generator-cli
+            git
 
             # Dev dependencies
             libyaml # psych gem
@@ -109,7 +110,7 @@
               description = "Generate a new sdk if a new version is available";
               exec = ''
                 # set -e
-                SPEC_URL="https://api.kombo.dev/openapi.json"
+                SPEC_URL="https://api.us.kombo.dev/openapi.json"
                 SPECS_DIR="api_specs"
                 VERSION_FILE="VERSION"
 
@@ -120,7 +121,7 @@
 
                 # Using svu current to determine the last known version
                 if command -v svu &> /dev/null; then
-                    CURRENT_VERSION=$(cat $VERSION_FILE)
+                    CURRENT_VERSION=$(svu current --tag.prefix="")
                 else
                     echo "Error: 'svu' utility not found."
                     exit 1
@@ -138,14 +139,12 @@
 
                 echo "Kombo API updated. Proceeding with generation."
 
-                NEW_VERSION=$(svu patch)
+                NEW_VERSION=$(svu patch --tag.prefix="")
                 echo "Current version: $CURRENT_VERSION"
                 echo "New version: $NEW_VERSION"
-                sleep 10
                 NEW_SPEC_FILE="$SPECS_DIR/kombo-openapi-spec-$NEW_VERSION.json"
                 mv new_openapi.json "$NEW_SPEC_FILE"
                 echo "$NEW_VERSION" > $VERSION_FILE
-
                 echo "Generating Ruby Client..."
                 openapi-generator-cli generate \
                     -i "$NEW_SPEC_FILE" \
@@ -153,6 +152,7 @@
                     -o . \
                     --additional-properties=gemName=kombo_client,gemVersion=$NEW_VERSION,moduleName=Kombo
 
+                git tag $NEW_VERSION
                 echo "SDK Generation complete"
               '';
             };

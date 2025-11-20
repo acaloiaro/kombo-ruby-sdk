@@ -18,3 +18,7 @@ ruby-client/
 # Nix env
 .devenv
 .direnv
+
+# generator
+.travis.yml
+git_push.sh

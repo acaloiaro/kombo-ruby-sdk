@@ -13,11 +13,13 @@ When kombo changes their OpenAPI spec, this SDK can be updated by running `gener
 
 ## Usage
 
-To make calls to Kombo's unified API, first create a `Kombo::Configuration` and create a client from it:
+First, [create a kombo API key](https://app.kombo.dev/secrets) and place it in an environment variable named `KOMBO_API_KEY`.
+
+Create a `Kombo::Configuration` and create a client from it:
 
 **Create a client**
 ```
-config ||= Kombo.configure do |c|
+config = Kombo.configure do |c|
   # As far as we can tell, this value is not currently used
   c.api_key = ENV['KOMBO_API_KEYY']
   # The access token is used in as the Bearer token when making requests to kombo's API; it's not clear why the
