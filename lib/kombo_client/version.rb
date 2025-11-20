@@ -11,5 +11,5 @@ Generator version: 7.17.0
 =end
 
 module Kombo
-  VERSION = ''
+  VERSION = 'v0.0.1'
 end

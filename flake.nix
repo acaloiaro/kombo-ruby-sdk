@@ -49,6 +49,10 @@
             ''
               bundle check || bundle install
               run-show-help
+            ''
+            + lib.optionalString stdenv.isDarwin ''
+              # Fix for https://github.com/NixOS/nixpkgs/issues/358795
+              unset DEVELOPER_DIR
             '';
 
           env = {
@@ -114,8 +118,7 @@
                 echo "Fetching latest OpenAPI spec..."
                 curl -sSL "$SPEC_URL" -o new_openapi.json
 
-                # Using svu current to determine the last known version from git tags
-                # Fallback to 0.0.0 if no version is found
+                # Using svu current to determine the last known version
                 if command -v svu &> /dev/null; then
                     CURRENT_VERSION=$(cat $VERSION_FILE)
                 else
@@ -138,10 +141,10 @@
                 NEW_VERSION=$(svu patch)
                 echo "Current version: $CURRENT_VERSION"
                 echo "New version: $NEW_VERSION"
-
+                sleep 10
                 NEW_SPEC_FILE="$SPECS_DIR/kombo-openapi-spec-$NEW_VERSION.json"
                 mv new_openapi.json "$NEW_SPEC_FILE"
-                echo "$NEW_VERSION" > "$VERSION_FILE"
+                echo "$NEW_VERSION" > $VERSION_FILE
 
                 echo "Generating Ruby Client..."
                 openapi-generator-cli generate \
