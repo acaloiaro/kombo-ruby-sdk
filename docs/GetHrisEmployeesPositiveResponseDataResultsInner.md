@@ -40,11 +40,11 @@
 | **remote_data** | **Hash&lt;String, Object&gt;** | Includes the data fetched from the remote system. Please be aware that including this in you scope config might violate other scopes that are set.  Remote data always has the endpoint path that we got the data from as the top level key. For example, it could look like: &#x60;{ \&quot;/companies\&quot;: { ... }}&#x60;  This is not available on all plans. Reach out to Kombo if you need it. |  |
 | **employments** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerEmploymentsInner&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerEmploymentsInner.md) |  |  |
 | **time_off_balances** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerTimeOffBalancesInner&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerTimeOffBalancesInner.md) |  |  |
-| **manager** | [**GetHrisEmployeesPositiveResponseDataResultsInnerManager**](GetHrisEmployeesPositiveResponseDataResultsInnerManager.md) |  |  |
+| **manager** | [**GetHrisEmployeesPositiveResponseDataResultsInnerManager**](GetHrisEmployeesPositiveResponseDataResultsInnerManager.md) |  | [optional] |
 | **groups** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerGroupsInner&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerGroupsInner.md) |  |  |
-| **legal_entity** | [**GetHrisEmployeesPositiveResponseDataResultsInnerLegalEntity**](GetHrisEmployeesPositiveResponseDataResultsInnerLegalEntity.md) |  |  |
+| **legal_entity** | [**GetHrisEmployeesPositiveResponseDataResultsInnerLegalEntity**](GetHrisEmployeesPositiveResponseDataResultsInnerLegalEntity.md) |  | [optional] |
 | **teams** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerGroupsInner&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerGroupsInner.md) | **(⚠️ Deprecated - Please use &#x60;groups&#x60; instead.  It includes the same data and the naming is less confusing.)** Maintained field for backwards compatibility. |  |
-| **work_location** | [**GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation**](GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation.md) |  |  |
+| **work_location** | [**GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation**](GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation.md) |  | [optional] |
 
 ## Example
 

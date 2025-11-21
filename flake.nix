@@ -106,10 +106,91 @@
                 '';
             };
 
+            process-openapi-spec = {
+              description = ''
+                Modifies the spec from OpenAPI in preparation for SDK generation.
+              '';
+              exec = ''
+                #!/bin/bash
+                 # ==============================================================================
+                 # Kombo OpenAPI spec processor
+                 # ==============================================================================
+                 # Komobo's OpenAPI spec (https://api.us.kombo.dev/openapi.json), as of version 1.0.0, specifies some
+                 # fields as "required" that are not required.
+                 #
+                 # This script removes fields from required lists that are not actually required.
+                 #
+                 # --- CONFIGURATION START ---
+                 # Configuration consists of a 'jq' path to a 'required' array for a particular object type, followed by
+                 # the list of values that will be removed from that path's array.
+                 #
+                 # E.g. The component `.components.schemas.GetHrisEmployeesPositiveResponse` lists "manager" and "work_location"
+                 # as required, but these fields should not be required.
+                 CONFIG=(
+                     ".components.schemas.GetHrisEmployeesPositiveResponse.properties.data.properties.results.items.required"
+                     "[\"manager\", \"work_location\", \"legal_entity\"]"
+
+                     # --- Add more modifications here following the two-line pattern ---
+                     # ".path.to.array"
+                     # "[\"value_to_remove\", \"another_value\"]"
+                 )
+
+                 if [ "$#" -ne 2 ]; then
+                     echo "Usage: $0 <input_file.json> <output_file.json>"
+                     echo "Please provide both an input file and an output file path."
+                     exit 1
+                 fi
+
+                 INPUT_FILE="$1"
+                 OUTPUT_FILE="$2"
+                 JQ_FILTER=""
+
+                 if [ ! -f "$INPUT_FILE" ]; then
+                     echo "Error: Input file not found: $INPUT_FILE"
+                     exit 1
+                 fi
+
+                 # Build the combined jq filter string
+                 echo "Building jq filter with $(( ''${#CONFIG[@]} / 2 )) modification(s)..."
+
+                 # Loop through the array, processing two items at a time (path and values)
+                 for ((i = 0; i < ''${#CONFIG[@]}; i += 2)); do
+                     PATH_EXPR="''${CONFIG[i]}"
+                     VALUES_TO_REMOVE="''${CONFIG[i+1]}"
+
+                     # Construct the modification: .path |= (. - ["values"])
+                     SINGLE_MODIFICATION="''${PATH_EXPR} |= (. - ''${VALUES_TO_REMOVE})"
+
+                     # Append to the main filter, separating expressions with commas
+                     if [[ -n "$JQ_FILTER" ]]; then
+                         JQ_FILTER+=", "
+                     fi
+                     JQ_FILTER+="$SINGLE_MODIFICATION"
+                 done
+
+                 if [[ -z "$JQ_FILTER" ]]; then
+                     echo "Warning: CONFIG array is empty. Copying input file to output file without modification."
+                     cp "$INPUT_FILE" "$OUTPUT_FILE"
+                     exit 0
+                 fi
+
+                 echo "Applying changes and saving to $OUTPUT_FILE..."
+                 jq -c "$JQ_FILTER" "$INPUT_FILE" > "$OUTPUT_FILE"
+
+                 # Check the exit status of jq
+                 if [ $? -eq 0 ]; then
+                     echo "Success! Modified JSON saved to $OUTPUT_FILE"
+                 else
+                     echo "Error: jq command failed. Check the input JSON and the CONFIG array for syntax errors."
+                     rm -f "$OUTPUT_FILE" # Clean up failed output file
+                     exit 1
+                 fi
+              '';
+            };
             generate-sdk = {
               description = "Generate a new sdk if a new version is available";
               exec = ''
-                # set -e
+                #! bash
                 SPEC_URL="https://api.us.kombo.dev/openapi.json"
                 SPECS_DIR="api_specs"
                 VERSION_FILE="VERSION"
@@ -146,13 +227,19 @@
                 mv new_openapi.json "$NEW_SPEC_FILE"
                 echo "$NEW_VERSION" > $VERSION_FILE
                 echo "Generating Ruby Client..."
+
+                # Kombo's spec lists some fields as required that are not actually required according to their
+                # documentation. This is true as of version `1.0.0` (jq '.info')
+                process-openapi-spec $NEW_SPEC_FILE "''${NEW_SPEC_FILE}.processed"
+                mv "''${NEW_SPEC_FILE}.processed" $NEW_SPEC_FILE
+
                 openapi-generator-cli generate \
                     -i "$NEW_SPEC_FILE" \
                     -g ruby \
                     -o . \
                     --additional-properties=gemName=kombo_client,gemVersion=$NEW_VERSION,moduleName=Kombo
 
-                git tag $NEW_VERSION
+                git tag ''${NEW_VERSION} -m "Bump version: ''${NEW_VERSION}"
                 echo "SDK Generation complete"
               '';
             };

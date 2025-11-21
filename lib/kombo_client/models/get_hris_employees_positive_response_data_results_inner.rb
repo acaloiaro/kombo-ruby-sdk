@@ -493,8 +493,6 @@ module Kombo
 
       if attributes.key?(:'manager')
         self.manager = attributes[:'manager']
-      else
-        self.manager = nil
       end
 
       if attributes.key?(:'groups')
@@ -507,8 +505,6 @@ module Kombo
 
       if attributes.key?(:'legal_entity')
         self.legal_entity = attributes[:'legal_entity']
-      else
-        self.legal_entity = nil
       end
 
       if attributes.key?(:'teams')
@@ -521,8 +517,6 @@ module Kombo
 
       if attributes.key?(:'work_location')
         self.work_location = attributes[:'work_location']
-      else
-        self.work_location = nil
       end
     end
 
@@ -569,24 +563,12 @@ module Kombo
         invalid_properties.push('invalid value for "time_off_balances", time_off_balances cannot be nil.')
       end
 
-      if @manager.nil?
-        invalid_properties.push('invalid value for "manager", manager cannot be nil.')
-      end
-
       if @groups.nil?
         invalid_properties.push('invalid value for "groups", groups cannot be nil.')
       end
 
-      if @legal_entity.nil?
-        invalid_properties.push('invalid value for "legal_entity", legal_entity cannot be nil.')
-      end
-
       if @teams.nil?
         invalid_properties.push('invalid value for "teams", teams cannot be nil.')
-      end
-
-      if @work_location.nil?
-        invalid_properties.push('invalid value for "work_location", work_location cannot be nil.')
       end
 
       invalid_properties
@@ -605,11 +587,8 @@ module Kombo
       return false if @integration_fields.nil?
       return false if @employments.nil?
       return false if @time_off_balances.nil?
-      return false if @manager.nil?
       return false if @groups.nil?
-      return false if @legal_entity.nil?
       return false if @teams.nil?
-      return false if @work_location.nil?
       true
     end
 
@@ -706,16 +685,6 @@ module Kombo
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] manager Value to be assigned
-    def manager=(manager)
-      if manager.nil?
-        fail ArgumentError, 'manager cannot be nil'
-      end
-
-      @manager = manager
-    end
-
-    # Custom attribute writer method with validation
     # @param [Object] groups Value to be assigned
     def groups=(groups)
       if groups.nil?
@@ -726,16 +695,6 @@ module Kombo
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] legal_entity Value to be assigned
-    def legal_entity=(legal_entity)
-      if legal_entity.nil?
-        fail ArgumentError, 'legal_entity cannot be nil'
-      end
-
-      @legal_entity = legal_entity
-    end
-
-    # Custom attribute writer method with validation
     # @param [Object] teams Value to be assigned
     def teams=(teams)
       if teams.nil?
@@ -743,16 +702,6 @@ module Kombo
       end
 
       @teams = teams
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] work_location Value to be assigned
-    def work_location=(work_location)
-      if work_location.nil?
-        fail ArgumentError, 'work_location cannot be nil'
-      end
-
-      @work_location = work_location
     end
 
     # Checks equality by comparing each attribute.
