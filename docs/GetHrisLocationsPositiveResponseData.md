@@ -5,7 +5,7 @@
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **_next** | **String** | Cursor string that can be passed to the &#x60;cursor&#x60; query parameter to get the next page. If this is &#x60;null&#x60;, then there are no more pages. |  |
-| **results** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation.md) |  |  |
+| **results** | [**Array&lt;GetHrisLocationsPositiveResponseDataResultsInner&gt;**](GetHrisLocationsPositiveResponseDataResultsInner.md) |  |  |
 
 ## Example
 

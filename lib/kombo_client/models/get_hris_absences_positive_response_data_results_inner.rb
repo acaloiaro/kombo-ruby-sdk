@@ -148,7 +148,7 @@ module Kombo
         :'changed_at' => :'Time',
         :'remote_deleted_at' => :'Time',
         :'remote_data' => :'Hash<String, Object>',
-        :'type' => :'GetHrisAbsenceTypesPositiveResponseDataResultsInner'
+        :'type' => :'GetHrisAbsencesPositiveResponseDataResultsInnerType'
       }
     end
 

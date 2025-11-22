@@ -22,7 +22,7 @@
 | **changed_at** | **Time** | The timestamp when this specific record was last modified. This field only updates when properties directly on this record change, NOT when related or nested models change. For filtering that considers nested data changes, use the &#x60;updated_after&#x60; parameter which will return records when either the record itself OR its related models have been updated. |  |
 | **remote_deleted_at** | **Time** | The date and time the object was deleted in the remote system. Objects are automatically marked as deleted when Kombo can&#39;t retrieve them from the remote system anymore. Kombo will also anonymize entries 14 days after they disappear. |  |
 | **remote_data** | **Hash&lt;String, Object&gt;** | Includes the data fetched from the remote system. Please be aware that including this in you scope config might violate other scopes that are set.  Remote data always has the endpoint path that we got the data from as the top level key. For example, it could look like: &#x60;{ \&quot;/companies\&quot;: { ... }}&#x60;  This is not available on all plans. Reach out to Kombo if you need it. |  |
-| **type** | [**GetHrisAbsenceTypesPositiveResponseDataResultsInner**](GetHrisAbsenceTypesPositiveResponseDataResultsInner.md) |  |  |
+| **type** | [**GetHrisAbsencesPositiveResponseDataResultsInnerType**](GetHrisAbsencesPositiveResponseDataResultsInnerType.md) |  |  |
 
 ## Example
 

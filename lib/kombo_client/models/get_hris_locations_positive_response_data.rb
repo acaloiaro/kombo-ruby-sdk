@@ -42,7 +42,7 @@ module Kombo
     def self.openapi_types
       {
         :'_next' => :'String',
-        :'results' => :'Array<GetHrisEmployeesPositiveResponseDataResultsInnerWorkLocation>'
+        :'results' => :'Array<GetHrisLocationsPositiveResponseDataResultsInner>'
       }
     end
 
