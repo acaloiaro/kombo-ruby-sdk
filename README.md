@@ -15,8 +15,6 @@ When kombo changes their OpenAPI spec, this SDK can be updated by running `gener
 
 First, [create a kombo API key](https://app.kombo.dev/secrets) and place it in an environment variable named `KOMBO_API_KEY`.
 
-Create a `Kombo::Configuration` and create a client from it:
-
 **Create a client**
 ```
 config = Kombo.configure do |c|

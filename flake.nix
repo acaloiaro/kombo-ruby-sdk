@@ -74,7 +74,7 @@
           languages = {
             ruby = {
               enable = true;
-              bundler.enable = false;
+              bundler.enable = true;
               versionFile = ./.ruby-version;
             };
           };
