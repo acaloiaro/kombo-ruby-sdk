@@ -130,7 +130,8 @@
                      end
                    )
                  )
-                EOF)
+                EOF
+                )
                 echo "Processor: $NULLABILITY_PREPROCESSOR"
                 if [ "$#" -ne 2 ]; then
                     echo "Usage: $0 <input_file.json> <output_file.json>"
