@@ -18,9 +18,10 @@ module Kombo
     HRIS = "hris".freeze
     ATS = "ats".freeze
     ASSESSMENT = "assessment".freeze
+    LMS = "lms".freeze
 
     def self.all_vars
-      @all_vars ||= [HRIS, ATS, ASSESSMENT].freeze
+      @all_vars ||= [HRIS, ATS, ASSESSMENT, LMS].freeze
     end
 
     # Builds the enum from string

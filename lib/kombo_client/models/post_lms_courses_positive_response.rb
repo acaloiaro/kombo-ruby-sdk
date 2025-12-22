@@ -19,6 +19,9 @@ module Kombo
 
     attr_accessor :data
 
+    # These are the interaction warnings that are shown in the dashboard. They are meant to provide debug information to you. We recommend logging them to the console.
+    attr_accessor :warnings
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -45,7 +48,8 @@ module Kombo
     def self.attribute_map
       {
         :'status' => :'status',
-        :'data' => :'data'
+        :'data' => :'data',
+        :'warnings' => :'warnings'
       }
     end
 
@@ -63,7 +67,8 @@ module Kombo
     def self.openapi_types
       {
         :'status' => :'String',
-        :'data' => :'GetLmsCoursesPositiveResponseDataResultsInner'
+        :'data' => :'GetLmsCoursesPositiveResponseDataResultsInner',
+        :'warnings' => :'Array<PostPassthroughToolApiPositiveResponseWarningsInner>'
       }
     end
 
@@ -100,6 +105,14 @@ module Kombo
       else
         self.data = nil
       end
+
+      if attributes.key?(:'warnings')
+        if (value = attributes[:'warnings']).is_a?(Array)
+          self.warnings = value
+        end
+      else
+        self.warnings = nil
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -115,6 +128,10 @@ module Kombo
         invalid_properties.push('invalid value for "data", data cannot be nil.')
       end
 
+      if @warnings.nil?
+        invalid_properties.push('invalid value for "warnings", warnings cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -126,6 +143,7 @@ module Kombo
       status_validator = EnumAttributeValidator.new('String', ["success"])
       return false unless status_validator.valid?(@status)
       return false if @data.nil?
+      return false if @warnings.nil?
       true
     end
 
@@ -149,13 +167,24 @@ module Kombo
       @data = data
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] warnings Value to be assigned
+    def warnings=(warnings)
+      if warnings.nil?
+        fail ArgumentError, 'warnings cannot be nil'
+      end
+
+      @warnings = warnings
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
           status == o.status &&
-          data == o.data
+          data == o.data &&
+          warnings == o.warnings
     end
 
     # @see the `==` method
@@ -167,7 +196,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [status, data].hash
+      [status, data, warnings].hash
     end
 
     # Builds the object from hash

@@ -16,6 +16,9 @@ require 'time'
 module Kombo
   # Information about the candidate taking the assessment.
   class AssessmentOrderReceivedWebhookPayloadDataCandidate < ApiModelBase
+    # The candidate's identifier in the integrated system.
+    attr_accessor :remote_id
+
     # The candidate's email address.
     attr_accessor :email
 
@@ -28,17 +31,14 @@ module Kombo
     # The candidate's phone number.
     attr_accessor :phone
 
-    # The candidate's identifier in the integrated system.
-    attr_accessor :remote_id
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'remote_id' => :'remote_id',
         :'email' => :'email',
         :'first_name' => :'first_name',
         :'last_name' => :'last_name',
-        :'phone' => :'phone',
-        :'remote_id' => :'remote_id'
+        :'phone' => :'phone'
       }
     end
 
@@ -55,11 +55,11 @@ module Kombo
     # Attribute type mapping.
     def self.openapi_types
       {
+        :'remote_id' => :'String',
         :'email' => :'String',
         :'first_name' => :'String',
         :'last_name' => :'String',
-        :'phone' => :'String',
-        :'remote_id' => :'String'
+        :'phone' => :'String'
       }
     end
 
@@ -85,6 +85,10 @@ module Kombo
         h[k.to_sym] = v
       }
 
+      if attributes.key?(:'remote_id')
+        self.remote_id = attributes[:'remote_id']
+      end
+
       if attributes.key?(:'email')
         self.email = attributes[:'email']
       else
@@ -101,10 +105,6 @@ module Kombo
 
       if attributes.key?(:'phone')
         self.phone = attributes[:'phone']
-      end
-
-      if attributes.key?(:'remote_id')
-        self.remote_id = attributes[:'remote_id']
       end
     end
 
@@ -143,11 +143,11 @@ module Kombo
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          remote_id == o.remote_id &&
           email == o.email &&
           first_name == o.first_name &&
           last_name == o.last_name &&
-          phone == o.phone &&
-          remote_id == o.remote_id
+          phone == o.phone
     end
 
     # @see the `==` method
@@ -159,7 +159,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [email, first_name, last_name, phone, remote_id].hash
+      [remote_id, email, first_name, last_name, phone].hash
     end
 
     # Builds the object from hash

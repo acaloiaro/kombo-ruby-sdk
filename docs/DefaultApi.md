@@ -13,7 +13,6 @@ All URIs are relative to *https://api.kombo.dev/v1*
 | [**webhook_integration_created_webhook_payload**](DefaultApi.md#webhook_integration_created_webhook_payload) | **POST** /integration-created | Integration created |
 | [**webhook_integration_deleted_webhook_payload**](DefaultApi.md#webhook_integration_deleted_webhook_payload) | **POST** /integration-deleted | Integration deleted |
 | [**webhook_integration_state_changed_webhook_payload**](DefaultApi.md#webhook_integration_state_changed_webhook_payload) | **POST** /integration-state-changed | Integration state changed |
-| [**webhook_remote_event_received_webhook_payload**](DefaultApi.md#webhook_remote_event_received_webhook_payload) | **POST** /remote-event-received | Remote event received |
 | [**webhook_sync_finished_webhook_payload**](DefaultApi.md#webhook_sync_finished_webhook_payload) | **POST** /sync-finished | Sync finished |
 
 
@@ -614,74 +613,6 @@ end
 | ---- | ---- | ----------- | ----- |
 | **x_kombo_signature** | **String** | HMAC signature for webhook verification. See the webhook documentation for details on how to verify this signature. |  |
 | **integration_state_changed_webhook_payload** | [**IntegrationStateChangedWebhookPayload**](IntegrationStateChangedWebhookPayload.md) |  |  |
-
-### Return type
-
-nil (empty response body)
-
-### Authorization
-
-[ApiKey](../README.md#ApiKey)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: Not defined
-
-
-## webhook_remote_event_received_webhook_payload
-
-> webhook_remote_event_received_webhook_payload(x_kombo_signature, remote_event_received_webhook_payload)
-
-Remote event received
-
-### Examples
-
-```ruby
-require 'time'
-require 'kombo_client'
-# setup authorization
-Kombo.configure do |config|
-  # Configure Bearer authorization: ApiKey
-  config.access_token = 'YOUR_BEARER_TOKEN'
-end
-
-api_instance = Kombo::DefaultApi.new
-x_kombo_signature =  # String | HMAC signature for webhook verification. See the webhook documentation for details on how to verify this signature.
-remote_event_received_webhook_payload =  # RemoteEventReceivedWebhookPayload | 
-
-begin
-  # Remote event received
-  api_instance.webhook_remote_event_received_webhook_payload(x_kombo_signature, remote_event_received_webhook_payload)
-rescue Kombo::ApiError => e
-  puts "Error when calling DefaultApi->webhook_remote_event_received_webhook_payload: #{e}"
-end
-```
-
-#### Using the webhook_remote_event_received_webhook_payload_with_http_info variant
-
-This returns an Array which contains the response data (`nil` in this case), status code and headers.
-
-> <Array(nil, Integer, Hash)> webhook_remote_event_received_webhook_payload_with_http_info(x_kombo_signature, remote_event_received_webhook_payload)
-
-```ruby
-begin
-  # Remote event received
-  data, status_code, headers = api_instance.webhook_remote_event_received_webhook_payload_with_http_info(x_kombo_signature, remote_event_received_webhook_payload)
-  p status_code # => 2xx
-  p headers # => { ... }
-  p data # => nil
-rescue Kombo::ApiError => e
-  puts "Error when calling DefaultApi->webhook_remote_event_received_webhook_payload_with_http_info: #{e}"
-end
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-| ---- | ---- | ----------- | ----- |
-| **x_kombo_signature** | **String** | HMAC signature for webhook verification. See the webhook documentation for details on how to verify this signature. |  |
-| **remote_event_received_webhook_payload** | [**RemoteEventReceivedWebhookPayload**](RemoteEventReceivedWebhookPayload.md) |  |  |
 
 ### Return type
 

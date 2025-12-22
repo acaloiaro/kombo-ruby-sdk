@@ -171,7 +171,7 @@ module Kombo
       return false if @id.nil?
       return false if @tool.nil?
       return false if @category.nil?
-      category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       return false unless category_validator.valid?(@category)
       return false if @end_user.nil?
       return false if @deleted_at.nil?
@@ -201,7 +201,7 @@ module Kombo
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] category Object to be assigned
     def category=(category)
-      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       unless validator.valid?(category)
         fail ArgumentError, "invalid value for \"category\", must be one of #{validator.allowable_values}."
       end

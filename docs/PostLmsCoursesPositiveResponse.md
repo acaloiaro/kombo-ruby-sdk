@@ -6,6 +6,7 @@
 | ---- | ---- | ----------- | ----- |
 | **status** | **String** |  |  |
 | **data** | [**GetLmsCoursesPositiveResponseDataResultsInner**](GetLmsCoursesPositiveResponseDataResultsInner.md) |  |  |
+| **warnings** | [**Array&lt;PostPassthroughToolApiPositiveResponseWarningsInner&gt;**](PostPassthroughToolApiPositiveResponseWarningsInner.md) | These are the interaction warnings that are shown in the dashboard. They are meant to provide debug information to you. We recommend logging them to the console. |  |
 
 ## Example
 
@@ -14,7 +15,8 @@ require 'kombo_client'
 
 instance = Kombo::PostLmsCoursesPositiveResponse.new(
   status: null,
-  data: null
+  data: null,
+  warnings: null
 )
 ```
 

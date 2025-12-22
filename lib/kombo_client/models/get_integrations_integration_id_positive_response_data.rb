@@ -31,12 +31,17 @@ module Kombo
 
     attr_accessor :scope_config
 
+    # The date when the integration configuration (e.g. filters, scope config) was changed, invalidating the synced data. It is cleared after a successful sync. If this field is `null` the data you fetch is valid to the state of the last sync or webhook event received. Otherwise it will be set to `null` with the next successful sync.
+    attr_accessor :data_expired_at
+
     # YYYY-MM-DDTHH:mm:ss.sssZ
     attr_accessor :created_at
 
     attr_accessor :beta
 
     attr_accessor :read_models
+
+    attr_accessor :write_actions
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -70,9 +75,11 @@ module Kombo
         :'setup_status' => :'setup_status',
         :'end_user' => :'end_user',
         :'scope_config' => :'scope_config',
+        :'data_expired_at' => :'data_expired_at',
         :'created_at' => :'created_at',
         :'beta' => :'beta',
-        :'read_models' => :'read_models'
+        :'read_models' => :'read_models',
+        :'write_actions' => :'write_actions'
       }
     end
 
@@ -96,15 +103,18 @@ module Kombo
         :'setup_status' => :'String',
         :'end_user' => :'GetIntegrationsIntegrationIdPositiveResponseDataEndUser',
         :'scope_config' => :'GetIntegrationsIntegrationIdPositiveResponseDataScopeConfig',
+        :'data_expired_at' => :'Time',
         :'created_at' => :'Time',
         :'beta' => :'Boolean',
-        :'read_models' => :'Array<GetIntegrationsIntegrationIdPositiveResponseDataReadModelsInner>'
+        :'read_models' => :'Array<GetIntegrationsIntegrationIdPositiveResponseDataReadModelsInner>',
+        :'write_actions' => :'Array<GetIntegrationsIntegrationIdPositiveResponseDataWriteActionsInner>'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'data_expired_at',
       ])
     end
 
@@ -166,6 +176,12 @@ module Kombo
         self.scope_config = nil
       end
 
+      if attributes.key?(:'data_expired_at')
+        self.data_expired_at = attributes[:'data_expired_at']
+      else
+        self.data_expired_at = nil
+      end
+
       if attributes.key?(:'created_at')
         self.created_at = attributes[:'created_at']
       else
@@ -184,6 +200,14 @@ module Kombo
         end
       else
         self.read_models = nil
+      end
+
+      if attributes.key?(:'write_actions')
+        if (value = attributes[:'write_actions']).is_a?(Array)
+          self.write_actions = value
+        end
+      else
+        self.write_actions = nil
       end
     end
 
@@ -232,6 +256,10 @@ module Kombo
         invalid_properties.push('invalid value for "read_models", read_models cannot be nil.')
       end
 
+      if @write_actions.nil?
+        invalid_properties.push('invalid value for "write_actions", write_actions cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -242,7 +270,7 @@ module Kombo
       return false if @id.nil?
       return false if @tool.nil?
       return false if @category.nil?
-      category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       return false unless category_validator.valid?(@category)
       return false if @status.nil?
       status_validator = EnumAttributeValidator.new('String', ["ACTIVE", "INVALID", "INACTIVE"])
@@ -255,6 +283,7 @@ module Kombo
       return false if @created_at.nil?
       return false if @beta.nil?
       return false if @read_models.nil?
+      return false if @write_actions.nil?
       true
     end
 
@@ -281,7 +310,7 @@ module Kombo
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] category Object to be assigned
     def category=(category)
-      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       unless validator.valid?(category)
         fail ArgumentError, "invalid value for \"category\", must be one of #{validator.allowable_values}."
       end
@@ -358,6 +387,16 @@ module Kombo
       @read_models = read_models
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] write_actions Value to be assigned
+    def write_actions=(write_actions)
+      if write_actions.nil?
+        fail ArgumentError, 'write_actions cannot be nil'
+      end
+
+      @write_actions = write_actions
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -370,9 +409,11 @@ module Kombo
           setup_status == o.setup_status &&
           end_user == o.end_user &&
           scope_config == o.scope_config &&
+          data_expired_at == o.data_expired_at &&
           created_at == o.created_at &&
           beta == o.beta &&
-          read_models == o.read_models
+          read_models == o.read_models &&
+          write_actions == o.write_actions
     end
 
     # @see the `==` method
@@ -384,7 +425,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, tool, category, status, setup_status, end_user, scope_config, created_at, beta, read_models].hash
+      [id, tool, category, status, setup_status, end_user, scope_config, data_expired_at, created_at, beta, read_models, write_actions].hash
     end
 
     # Builds the object from hash

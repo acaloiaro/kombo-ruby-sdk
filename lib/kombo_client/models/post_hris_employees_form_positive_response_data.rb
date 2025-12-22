@@ -18,18 +18,17 @@ module Kombo
     # The Kombo id of the created employee. If null, we only created a pre-hire which shows up in the next sync after a successful onboarding.
     attr_accessor :id
 
-    # The raw ID of the created employee in the remote system. This is only populated when `id` is set (i.e., when a full employee was created). For pre-hires, use `prehire_id` instead.
+    # The raw ID of the created employee in the remote system. This is only populated when `id` is set (i.e., when a full employee was created). For pre-hires, use the `prehire` object instead.
     attr_accessor :remote_id
 
-    # The temporary ID returned by the remote system when creating a pre-hire. This ID may change or become invalid when the pre-hire becomes a full employee. Only populated when `id` is null.
-    attr_accessor :prehire_id
+    attr_accessor :prehire
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'remote_id' => :'remote_id',
-        :'prehire_id' => :'prehire_id'
+        :'prehire' => :'prehire'
       }
     end
 
@@ -48,7 +47,7 @@ module Kombo
       {
         :'id' => :'String',
         :'remote_id' => :'String',
-        :'prehire_id' => :'String'
+        :'prehire' => :'PostHrisEmployeesFormPositiveResponseDataPrehire'
       }
     end
 
@@ -57,7 +56,6 @@ module Kombo
       Set.new([
         :'id',
         :'remote_id',
-        :'prehire_id'
       ])
     end
 
@@ -89,10 +87,10 @@ module Kombo
         self.remote_id = nil
       end
 
-      if attributes.key?(:'prehire_id')
-        self.prehire_id = attributes[:'prehire_id']
+      if attributes.key?(:'prehire')
+        self.prehire = attributes[:'prehire']
       else
-        self.prehire_id = nil
+        self.prehire = nil
       end
     end
 
@@ -101,6 +99,10 @@ module Kombo
     def list_invalid_properties
       warn '[DEPRECATED] the `list_invalid_properties` method is obsolete'
       invalid_properties = Array.new
+      if @prehire.nil?
+        invalid_properties.push('invalid value for "prehire", prehire cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -108,7 +110,18 @@ module Kombo
     # @return true if the model is valid
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
+      return false if @prehire.nil?
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] prehire Value to be assigned
+    def prehire=(prehire)
+      if prehire.nil?
+        fail ArgumentError, 'prehire cannot be nil'
+      end
+
+      @prehire = prehire
     end
 
     # Checks equality by comparing each attribute.
@@ -118,7 +131,7 @@ module Kombo
       self.class == o.class &&
           id == o.id &&
           remote_id == o.remote_id &&
-          prehire_id == o.prehire_id
+          prehire == o.prehire
     end
 
     # @see the `==` method
@@ -130,7 +143,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, remote_id, prehire_id].hash
+      [id, remote_id, prehire].hash
     end
 
     # Builds the object from hash

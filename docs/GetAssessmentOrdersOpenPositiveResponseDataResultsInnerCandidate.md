@@ -4,11 +4,11 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
+| **remote_id** | **String** | The candidate&#39;s identifier in the integrated system. | [optional] |
 | **email** | **String** | The candidate&#39;s email address. |  |
 | **first_name** | **String** | The candidate&#39;s first name. | [optional] |
 | **last_name** | **String** | The candidate&#39;s last name. | [optional] |
 | **phone** | **String** | The candidate&#39;s phone number. | [optional] |
-| **remote_id** | **String** | The candidate&#39;s identifier in the integrated system. | [optional] |
 
 ## Example
 
@@ -16,11 +16,11 @@
 require 'kombo_client'
 
 instance = Kombo::GetAssessmentOrdersOpenPositiveResponseDataResultsInnerCandidate.new(
+  remote_id: null,
   email: null,
   first_name: null,
   last_name: null,
-  phone: null,
-  remote_id: null
+  phone: null
 )
 ```
 

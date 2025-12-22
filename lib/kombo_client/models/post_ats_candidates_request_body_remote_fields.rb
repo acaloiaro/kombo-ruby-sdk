@@ -56,6 +56,8 @@ module Kombo
 
     attr_accessor :piloga
 
+    attr_accessor :pinpoint
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -78,7 +80,8 @@ module Kombo
         :'avature' => :'avature',
         :'recruitee' => :'recruitee',
         :'umantis' => :'umantis',
-        :'piloga' => :'piloga'
+        :'piloga' => :'piloga',
+        :'pinpoint' => :'pinpoint'
       }
     end
 
@@ -114,7 +117,8 @@ module Kombo
         :'avature' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfAvature',
         :'recruitee' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfRecruitee',
         :'umantis' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfUmantis',
-        :'piloga' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfPiloga'
+        :'piloga' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfPiloga',
+        :'pinpoint' => :'PostAtsCandidatesRequestBodyRemoteFieldsAllOfPinpoint'
       }
     end
 
@@ -219,6 +223,10 @@ module Kombo
       if attributes.key?(:'piloga')
         self.piloga = attributes[:'piloga']
       end
+
+      if attributes.key?(:'pinpoint')
+        self.pinpoint = attributes[:'pinpoint']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -260,7 +268,8 @@ module Kombo
           avature == o.avature &&
           recruitee == o.recruitee &&
           umantis == o.umantis &&
-          piloga == o.piloga
+          piloga == o.piloga &&
+          pinpoint == o.pinpoint
     end
 
     # @see the `==` method
@@ -272,7 +281,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [successfactors, personio, talentsoft, teamtailor, greenhouse, lever, workable, workday, zohorecruit, bullhorn, smartrecruiters, talentadore, guidecom, dvinci, hrworks, jobylon, avature, recruitee, umantis, piloga].hash
+      [successfactors, personio, talentsoft, teamtailor, greenhouse, lever, workable, workday, zohorecruit, bullhorn, smartrecruiters, talentadore, guidecom, dvinci, hrworks, jobylon, avature, recruitee, umantis, piloga, pinpoint].hash
     end
 
     # Builds the object from hash

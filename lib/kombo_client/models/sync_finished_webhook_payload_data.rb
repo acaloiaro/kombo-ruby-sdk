@@ -36,7 +36,7 @@ module Kombo
     # The name of the integrated tool (e.g., \"personio\", \"greenhouse\").
     attr_accessor :integration_tool
 
-    # The category of the integration (HRIS, ATS, or ASSESSMENT).
+    # The category of the integration (HRIS, ATS, ASSESSMENT, or LMS).
     attr_accessor :integration_category
 
     attr_accessor :end_user
@@ -256,7 +256,7 @@ module Kombo
       return false if @integration_id.nil?
       return false if @integration_tool.nil?
       return false if @integration_category.nil?
-      integration_category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      integration_category_validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       return false unless integration_category_validator.valid?(@integration_category)
       return false if @end_user.nil?
       return false if @log_url.nil?
@@ -340,7 +340,7 @@ module Kombo
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] integration_category Object to be assigned
     def integration_category=(integration_category)
-      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT"])
+      validator = EnumAttributeValidator.new('String', ["HRIS", "ATS", "ASSESSMENT", "LMS"])
       unless validator.valid?(integration_category)
         fail ArgumentError, "invalid value for \"integration_category\", must be one of #{validator.allowable_values}."
       end

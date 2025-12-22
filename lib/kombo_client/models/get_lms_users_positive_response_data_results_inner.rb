@@ -36,14 +36,20 @@ module Kombo
     # The date and time the object was created in the remote system.
     attr_accessor :remote_created_at
 
-    # Array of course progress records for this user.
-    attr_accessor :progress
+    # The date and time the object was deleted in the remote system. Objects are automatically marked as deleted when Kombo can't retrieve them from the remote system anymore. Kombo will also anonymize entries 14 days after they disappear.
+    attr_accessor :remote_deleted_at
 
     # The timestamp when this specific record was last modified. This field only updates when properties directly on this record change, NOT when related or nested models change. For filtering that considers nested data changes, use the `updated_after` parameter which will return records when either the record itself OR its related models have been updated.
     attr_accessor :changed_at
 
     # Includes the data fetched from the remote system. Please be aware that including this in you scope config might violate other scopes that are set.  Remote data always has the endpoint path that we got the data from as the top level key. For example, it could look like: `{ \"/companies\": { ... }}`  This is not available on all plans. Reach out to Kombo if you need it.
     attr_accessor :remote_data
+
+    # A key-value store of fields not covered by the schema. [Read more](/custom-fields)
+    attr_accessor :custom_fields
+
+    # An array of selected passthrough integration fields. [Read more](/integration-fields)
+    attr_accessor :integration_fields
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -77,9 +83,11 @@ module Kombo
         :'work_email' => :'work_email',
         :'status' => :'status',
         :'remote_created_at' => :'remote_created_at',
-        :'progress' => :'progress',
+        :'remote_deleted_at' => :'remote_deleted_at',
         :'changed_at' => :'changed_at',
-        :'remote_data' => :'remote_data'
+        :'remote_data' => :'remote_data',
+        :'custom_fields' => :'custom_fields',
+        :'integration_fields' => :'integration_fields'
       }
     end
 
@@ -103,9 +111,11 @@ module Kombo
         :'work_email' => :'String',
         :'status' => :'String',
         :'remote_created_at' => :'Time',
-        :'progress' => :'Array<GetLmsUsersPositiveResponseDataResultsInnerProgressInner>',
+        :'remote_deleted_at' => :'Time',
         :'changed_at' => :'Time',
-        :'remote_data' => :'Hash<String, Object>'
+        :'remote_data' => :'Hash<String, Object>',
+        :'custom_fields' => :'Hash<String, Object>',
+        :'integration_fields' => :'Array<GetHrisEmployeesPositiveResponseDataResultsInnerIntegrationFieldsInner>'
       }
     end
 
@@ -115,8 +125,11 @@ module Kombo
         :'first_name',
         :'last_name',
         :'work_email',
+        :'status',
         :'remote_created_at',
-        :'remote_data'
+        :'remote_deleted_at',
+        :'remote_data',
+        :'custom_fields',
       ])
     end
 
@@ -178,12 +191,10 @@ module Kombo
         self.remote_created_at = nil
       end
 
-      if attributes.key?(:'progress')
-        if (value = attributes[:'progress']).is_a?(Array)
-          self.progress = value
-        end
+      if attributes.key?(:'remote_deleted_at')
+        self.remote_deleted_at = attributes[:'remote_deleted_at']
       else
-        self.progress = nil
+        self.remote_deleted_at = nil
       end
 
       if attributes.key?(:'changed_at')
@@ -198,6 +209,22 @@ module Kombo
         end
       else
         self.remote_data = nil
+      end
+
+      if attributes.key?(:'custom_fields')
+        if (value = attributes[:'custom_fields']).is_a?(Hash)
+          self.custom_fields = value
+        end
+      else
+        self.custom_fields = nil
+      end
+
+      if attributes.key?(:'integration_fields')
+        if (value = attributes[:'integration_fields']).is_a?(Array)
+          self.integration_fields = value
+        end
+      else
+        self.integration_fields = nil
       end
     end
 
@@ -214,16 +241,12 @@ module Kombo
         invalid_properties.push('invalid value for "remote_id", remote_id cannot be nil.')
       end
 
-      if @status.nil?
-        invalid_properties.push('invalid value for "status", status cannot be nil.')
-      end
-
-      if @progress.nil?
-        invalid_properties.push('invalid value for "progress", progress cannot be nil.')
-      end
-
       if @changed_at.nil?
         invalid_properties.push('invalid value for "changed_at", changed_at cannot be nil.')
+      end
+
+      if @integration_fields.nil?
+        invalid_properties.push('invalid value for "integration_fields", integration_fields cannot be nil.')
       end
 
       invalid_properties
@@ -235,11 +258,10 @@ module Kombo
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @id.nil?
       return false if @remote_id.nil?
-      return false if @status.nil?
       status_validator = EnumAttributeValidator.new('String', ["ACTIVE", "INACTIVE"])
       return false unless status_validator.valid?(@status)
-      return false if @progress.nil?
       return false if @changed_at.nil?
+      return false if @integration_fields.nil?
       true
     end
 
@@ -274,16 +296,6 @@ module Kombo
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] progress Value to be assigned
-    def progress=(progress)
-      if progress.nil?
-        fail ArgumentError, 'progress cannot be nil'
-      end
-
-      @progress = progress
-    end
-
-    # Custom attribute writer method with validation
     # @param [Object] changed_at Value to be assigned
     def changed_at=(changed_at)
       if changed_at.nil?
@@ -291,6 +303,16 @@ module Kombo
       end
 
       @changed_at = changed_at
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] integration_fields Value to be assigned
+    def integration_fields=(integration_fields)
+      if integration_fields.nil?
+        fail ArgumentError, 'integration_fields cannot be nil'
+      end
+
+      @integration_fields = integration_fields
     end
 
     # Checks equality by comparing each attribute.
@@ -305,9 +327,11 @@ module Kombo
           work_email == o.work_email &&
           status == o.status &&
           remote_created_at == o.remote_created_at &&
-          progress == o.progress &&
+          remote_deleted_at == o.remote_deleted_at &&
           changed_at == o.changed_at &&
-          remote_data == o.remote_data
+          remote_data == o.remote_data &&
+          custom_fields == o.custom_fields &&
+          integration_fields == o.integration_fields
     end
 
     # @see the `==` method
@@ -319,7 +343,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, remote_id, first_name, last_name, work_email, status, remote_created_at, progress, changed_at, remote_data].hash
+      [id, remote_id, first_name, last_name, work_email, status, remote_created_at, remote_deleted_at, changed_at, remote_data, custom_fields, integration_fields].hash
     end
 
     # Builds the object from hash

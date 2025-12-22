@@ -11,9 +11,11 @@
 | **setup_status** | **String** | The setup_status is used in conjunction with the filtering and field mapping features. If these are enabled in the connection flow, the integration will start in an \&quot;INCOMPLETE\&quot; state and move to \&quot;COMPLETE\&quot; once all steps are finished.  - &#x60;INCOMPLETE&#x60;: Setup is still in progress. Some steps aren’t finished, so no data is available yet. Syncs only run as needed for setup. - &#x60;FINAL_SYNC_PENDING&#x60;: Setup is complete, and the final sync is running. Data will be available after this sync is done. - &#x60;COMPLETED&#x60;: Setup is fully finished, and the integration is ready to use. |  |
 | **end_user** | [**GetIntegrationsIntegrationIdPositiveResponseDataEndUser**](GetIntegrationsIntegrationIdPositiveResponseDataEndUser.md) |  |  |
 | **scope_config** | [**GetIntegrationsIntegrationIdPositiveResponseDataScopeConfig**](GetIntegrationsIntegrationIdPositiveResponseDataScopeConfig.md) |  |  |
+| **data_expired_at** | **Time** | The date when the integration configuration (e.g. filters, scope config) was changed, invalidating the synced data. It is cleared after a successful sync. If this field is &#x60;null&#x60; the data you fetch is valid to the state of the last sync or webhook event received. Otherwise it will be set to &#x60;null&#x60; with the next successful sync. |  |
 | **created_at** | **Time** | YYYY-MM-DDTHH:mm:ss.sssZ |  |
 | **beta** | **Boolean** |  |  |
 | **read_models** | [**Array&lt;GetIntegrationsIntegrationIdPositiveResponseDataReadModelsInner&gt;**](GetIntegrationsIntegrationIdPositiveResponseDataReadModelsInner.md) |  |  |
+| **write_actions** | [**Array&lt;GetIntegrationsIntegrationIdPositiveResponseDataWriteActionsInner&gt;**](GetIntegrationsIntegrationIdPositiveResponseDataWriteActionsInner.md) |  |  |
 
 ## Example
 
@@ -28,9 +30,11 @@ instance = Kombo::GetIntegrationsIntegrationIdPositiveResponseData.new(
   setup_status: null,
   end_user: null,
   scope_config: null,
+  data_expired_at: null,
   created_at: null,
   beta: null,
-  read_models: null
+  read_models: null,
+  write_actions: null
 )
 ```
 

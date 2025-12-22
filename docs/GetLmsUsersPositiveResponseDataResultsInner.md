@@ -11,9 +11,11 @@
 | **work_email** | **String** | The user&#39;s work email address. |  |
 | **status** | **String** | Current status of the user in the LMS. |  |
 | **remote_created_at** | **Time** | The date and time the object was created in the remote system. |  |
-| **progress** | [**Array&lt;GetLmsUsersPositiveResponseDataResultsInnerProgressInner&gt;**](GetLmsUsersPositiveResponseDataResultsInnerProgressInner.md) | Array of course progress records for this user. |  |
+| **remote_deleted_at** | **Time** | The date and time the object was deleted in the remote system. Objects are automatically marked as deleted when Kombo can&#39;t retrieve them from the remote system anymore. Kombo will also anonymize entries 14 days after they disappear. |  |
 | **changed_at** | **Time** | The timestamp when this specific record was last modified. This field only updates when properties directly on this record change, NOT when related or nested models change. For filtering that considers nested data changes, use the &#x60;updated_after&#x60; parameter which will return records when either the record itself OR its related models have been updated. |  |
 | **remote_data** | **Hash&lt;String, Object&gt;** | Includes the data fetched from the remote system. Please be aware that including this in you scope config might violate other scopes that are set.  Remote data always has the endpoint path that we got the data from as the top level key. For example, it could look like: &#x60;{ \&quot;/companies\&quot;: { ... }}&#x60;  This is not available on all plans. Reach out to Kombo if you need it. |  |
+| **custom_fields** | **Hash&lt;String, Object&gt;** | A key-value store of fields not covered by the schema. [Read more](/custom-fields) |  |
+| **integration_fields** | [**Array&lt;GetHrisEmployeesPositiveResponseDataResultsInnerIntegrationFieldsInner&gt;**](GetHrisEmployeesPositiveResponseDataResultsInnerIntegrationFieldsInner.md) | An array of selected passthrough integration fields. [Read more](/integration-fields) |  |
 
 ## Example
 
@@ -28,9 +30,11 @@ instance = Kombo::GetLmsUsersPositiveResponseDataResultsInner.new(
   work_email: null,
   status: null,
   remote_created_at: null,
-  progress: null,
+  remote_deleted_at: null,
   changed_at: null,
-  remote_data: null
+  remote_data: null,
+  custom_fields: null,
+  integration_fields: null
 )
 ```
 

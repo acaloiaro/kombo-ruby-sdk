@@ -23,6 +23,8 @@ module Kombo
     # The status of a datapoint of an integrated tool:  - `SUPPORTED`: the tool supports the datapoint and it can be used through Kombo. - `UNSUPPORTED`: the tool does not support the datapoint. - `NOT_IMPLEMENTED`: tool supports the datapoint but it was not integrated by Kombo for a given reason (see coverage grid). - `UNKNOWN`: the datapoint is not integrated yet and Kombo has no information about it's availability in the tool.
     attr_accessor :coverage_status
 
+    attr_accessor :fields
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -50,7 +52,8 @@ module Kombo
       {
         :'id' => :'id',
         :'label' => :'label',
-        :'coverage_status' => :'coverage_status'
+        :'coverage_status' => :'coverage_status',
+        :'fields' => :'fields'
       }
     end
 
@@ -69,7 +72,8 @@ module Kombo
       {
         :'id' => :'String',
         :'label' => :'String',
-        :'coverage_status' => :'String'
+        :'coverage_status' => :'String',
+        :'fields' => :'Array<GetToolsCategoryPositiveResponseDataToolsInnerCoverageWriteActionsInnerFieldsInner>'
       }
     end
 
@@ -112,6 +116,14 @@ module Kombo
       else
         self.coverage_status = nil
       end
+
+      if attributes.key?(:'fields')
+        if (value = attributes[:'fields']).is_a?(Array)
+          self.fields = value
+        end
+      else
+        self.fields = nil
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -131,6 +143,10 @@ module Kombo
         invalid_properties.push('invalid value for "coverage_status", coverage_status cannot be nil.')
       end
 
+      if @fields.nil?
+        invalid_properties.push('invalid value for "fields", fields cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -143,6 +159,7 @@ module Kombo
       return false if @coverage_status.nil?
       coverage_status_validator = EnumAttributeValidator.new('String', ["SUPPORTED", "UNSUPPORTED", "NOT_IMPLEMENTED", "UNKNOWN"])
       return false unless coverage_status_validator.valid?(@coverage_status)
+      return false if @fields.nil?
       true
     end
 
@@ -176,6 +193,16 @@ module Kombo
       @coverage_status = coverage_status
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] fields Value to be assigned
+    def fields=(fields)
+      if fields.nil?
+        fail ArgumentError, 'fields cannot be nil'
+      end
+
+      @fields = fields
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -183,7 +210,8 @@ module Kombo
       self.class == o.class &&
           id == o.id &&
           label == o.label &&
-          coverage_status == o.coverage_status
+          coverage_status == o.coverage_status &&
+          fields == o.fields
     end
 
     # @see the `==` method
@@ -195,7 +223,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, coverage_status].hash
+      [id, label, coverage_status, fields].hash
     end
 
     # Builds the object from hash

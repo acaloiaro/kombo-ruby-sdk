@@ -6,7 +6,7 @@
 | ---- | ---- | ----------- | ----- |
 | **integration_tool** | **String** | The name of the integrated tool (e.g., \&quot;personio\&quot;, \&quot;greenhouse\&quot;). |  |
 | **integration_id** | **String** | The unique identifier of the integration. |  |
-| **integration_category** | **String** | The category of the integration (HRIS, ATS, or ASSESSMENT). |  |
+| **integration_category** | **String** | The category of the integration (HRIS, ATS, ASSESSMENT, or LMS). |  |
 | **end_user** | [**ConnectionFlowFailedWebhookPayloadDataEndUser**](ConnectionFlowFailedWebhookPayloadDataEndUser.md) |  |  |
 | **qa_status** | **String** | The quality assurance status of the integration. |  |
 | **state** | **String** | The current state of the integration. |  |

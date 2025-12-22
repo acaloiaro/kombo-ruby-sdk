@@ -21,47 +21,45 @@ module Kombo
     # The raw ID of the object in the remote system. We don't recommend using this as a primary key on your side as it might sometimes be compromised of multiple identifiers if a system doesn't provide a clear primary key.
     attr_accessor :remote_id
 
-    # The title of the course.
-    attr_accessor :title
-
-    # A description of the course.
-    attr_accessor :description
-
-    # URL where the course can be accessed.
-    attr_accessor :url
+    # The Kombo ID of the course provider of this course, if applicable.
+    attr_accessor :provider_id
 
     # The date and time the object was created in the remote system.
     attr_accessor :remote_created_at
 
-    # Skills that learners will develop by completing this course.
-    attr_accessor :skills
-
-    # Ordered list of content items that make up this course.
-    attr_accessor :ordered_content
+    # The date and time the object was deleted in the remote system. Objects are automatically marked as deleted when Kombo can't retrieve them from the remote system anymore. Kombo will also anonymize entries 14 days after they disappear.
+    attr_accessor :remote_deleted_at
 
     # The timestamp when this specific record was last modified. This field only updates when properties directly on this record change, NOT when related or nested models change. For filtering that considers nested data changes, use the `updated_after` parameter which will return records when either the record itself OR its related models have been updated.
     attr_accessor :changed_at
 
-    # Date when the course was deleted.
-    attr_accessor :remote_deleted_at
-
     # Includes the data fetched from the remote system. Please be aware that including this in you scope config might violate other scopes that are set.  Remote data always has the endpoint path that we got the data from as the top level key. For example, it could look like: `{ \"/companies\": { ... }}`  This is not available on all plans. Reach out to Kombo if you need it.
     attr_accessor :remote_data
+
+    # A key-value store of fields not covered by the schema. [Read more](/custom-fields)
+    attr_accessor :custom_fields
+
+    # An array of selected passthrough integration fields. [Read more](/integration-fields)
+    attr_accessor :integration_fields
+
+    attr_accessor :provider
+
+    attr_accessor :revisions
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'remote_id' => :'remote_id',
-        :'title' => :'title',
-        :'description' => :'description',
-        :'url' => :'url',
+        :'provider_id' => :'provider_id',
         :'remote_created_at' => :'remote_created_at',
-        :'skills' => :'skills',
-        :'ordered_content' => :'ordered_content',
-        :'changed_at' => :'changed_at',
         :'remote_deleted_at' => :'remote_deleted_at',
-        :'remote_data' => :'remote_data'
+        :'changed_at' => :'changed_at',
+        :'remote_data' => :'remote_data',
+        :'custom_fields' => :'custom_fields',
+        :'integration_fields' => :'integration_fields',
+        :'provider' => :'provider',
+        :'revisions' => :'revisions'
       }
     end
 
@@ -80,27 +78,26 @@ module Kombo
       {
         :'id' => :'String',
         :'remote_id' => :'String',
-        :'title' => :'String',
-        :'description' => :'String',
-        :'url' => :'String',
+        :'provider_id' => :'String',
         :'remote_created_at' => :'Time',
-        :'skills' => :'Array<GetLmsCoursesPositiveResponseDataResultsInnerSkillsInner>',
-        :'ordered_content' => :'Array<GetLmsCoursesPositiveResponseDataResultsInnerOrderedContentInner>',
+        :'remote_deleted_at' => :'Time',
         :'changed_at' => :'Time',
-        :'remote_deleted_at' => :'String',
-        :'remote_data' => :'Hash<String, Object>'
+        :'remote_data' => :'Hash<String, Object>',
+        :'custom_fields' => :'Hash<String, Object>',
+        :'integration_fields' => :'Array<GetHrisEmployeesPositiveResponseDataResultsInnerIntegrationFieldsInner>',
+        :'provider' => :'GetLmsCoursesPositiveResponseDataResultsInnerProvider',
+        :'revisions' => :'Array<GetLmsCoursesPositiveResponseDataResultsInnerRevisionsInner>'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'description',
-        :'url',
+        :'provider_id',
         :'remote_created_at',
-        :'skills',
         :'remote_deleted_at',
-        :'remote_data'
+        :'remote_data',
+        :'custom_fields',
       ])
     end
 
@@ -132,22 +129,10 @@ module Kombo
         self.remote_id = nil
       end
 
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
+      if attributes.key?(:'provider_id')
+        self.provider_id = attributes[:'provider_id']
       else
-        self.title = nil
-      end
-
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
-      else
-        self.description = nil
-      end
-
-      if attributes.key?(:'url')
-        self.url = attributes[:'url']
-      else
-        self.url = nil
+        self.provider_id = nil
       end
 
       if attributes.key?(:'remote_created_at')
@@ -156,20 +141,10 @@ module Kombo
         self.remote_created_at = nil
       end
 
-      if attributes.key?(:'skills')
-        if (value = attributes[:'skills']).is_a?(Array)
-          self.skills = value
-        end
+      if attributes.key?(:'remote_deleted_at')
+        self.remote_deleted_at = attributes[:'remote_deleted_at']
       else
-        self.skills = nil
-      end
-
-      if attributes.key?(:'ordered_content')
-        if (value = attributes[:'ordered_content']).is_a?(Array)
-          self.ordered_content = value
-        end
-      else
-        self.ordered_content = nil
+        self.remote_deleted_at = nil
       end
 
       if attributes.key?(:'changed_at')
@@ -178,18 +153,42 @@ module Kombo
         self.changed_at = nil
       end
 
-      if attributes.key?(:'remote_deleted_at')
-        self.remote_deleted_at = attributes[:'remote_deleted_at']
-      else
-        self.remote_deleted_at = nil
-      end
-
       if attributes.key?(:'remote_data')
         if (value = attributes[:'remote_data']).is_a?(Hash)
           self.remote_data = value
         end
       else
         self.remote_data = nil
+      end
+
+      if attributes.key?(:'custom_fields')
+        if (value = attributes[:'custom_fields']).is_a?(Hash)
+          self.custom_fields = value
+        end
+      else
+        self.custom_fields = nil
+      end
+
+      if attributes.key?(:'integration_fields')
+        if (value = attributes[:'integration_fields']).is_a?(Array)
+          self.integration_fields = value
+        end
+      else
+        self.integration_fields = nil
+      end
+
+      if attributes.key?(:'provider')
+        self.provider = attributes[:'provider']
+      else
+        self.provider = nil
+      end
+
+      if attributes.key?(:'revisions')
+        if (value = attributes[:'revisions']).is_a?(Array)
+          self.revisions = value
+        end
+      else
+        self.revisions = nil
       end
     end
 
@@ -206,16 +205,20 @@ module Kombo
         invalid_properties.push('invalid value for "remote_id", remote_id cannot be nil.')
       end
 
-      if @title.nil?
-        invalid_properties.push('invalid value for "title", title cannot be nil.')
-      end
-
-      if @ordered_content.nil?
-        invalid_properties.push('invalid value for "ordered_content", ordered_content cannot be nil.')
-      end
-
       if @changed_at.nil?
         invalid_properties.push('invalid value for "changed_at", changed_at cannot be nil.')
+      end
+
+      if @integration_fields.nil?
+        invalid_properties.push('invalid value for "integration_fields", integration_fields cannot be nil.')
+      end
+
+      if @provider.nil?
+        invalid_properties.push('invalid value for "provider", provider cannot be nil.')
+      end
+
+      if @revisions.nil?
+        invalid_properties.push('invalid value for "revisions", revisions cannot be nil.')
       end
 
       invalid_properties
@@ -227,9 +230,10 @@ module Kombo
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @id.nil?
       return false if @remote_id.nil?
-      return false if @title.nil?
-      return false if @ordered_content.nil?
       return false if @changed_at.nil?
+      return false if @integration_fields.nil?
+      return false if @provider.nil?
+      return false if @revisions.nil?
       true
     end
 
@@ -254,26 +258,6 @@ module Kombo
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] title Value to be assigned
-    def title=(title)
-      if title.nil?
-        fail ArgumentError, 'title cannot be nil'
-      end
-
-      @title = title
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] ordered_content Value to be assigned
-    def ordered_content=(ordered_content)
-      if ordered_content.nil?
-        fail ArgumentError, 'ordered_content cannot be nil'
-      end
-
-      @ordered_content = ordered_content
-    end
-
-    # Custom attribute writer method with validation
     # @param [Object] changed_at Value to be assigned
     def changed_at=(changed_at)
       if changed_at.nil?
@@ -283,6 +267,36 @@ module Kombo
       @changed_at = changed_at
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] integration_fields Value to be assigned
+    def integration_fields=(integration_fields)
+      if integration_fields.nil?
+        fail ArgumentError, 'integration_fields cannot be nil'
+      end
+
+      @integration_fields = integration_fields
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] provider Value to be assigned
+    def provider=(provider)
+      if provider.nil?
+        fail ArgumentError, 'provider cannot be nil'
+      end
+
+      @provider = provider
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] revisions Value to be assigned
+    def revisions=(revisions)
+      if revisions.nil?
+        fail ArgumentError, 'revisions cannot be nil'
+      end
+
+      @revisions = revisions
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -290,15 +304,15 @@ module Kombo
       self.class == o.class &&
           id == o.id &&
           remote_id == o.remote_id &&
-          title == o.title &&
-          description == o.description &&
-          url == o.url &&
+          provider_id == o.provider_id &&
           remote_created_at == o.remote_created_at &&
-          skills == o.skills &&
-          ordered_content == o.ordered_content &&
-          changed_at == o.changed_at &&
           remote_deleted_at == o.remote_deleted_at &&
-          remote_data == o.remote_data
+          changed_at == o.changed_at &&
+          remote_data == o.remote_data &&
+          custom_fields == o.custom_fields &&
+          integration_fields == o.integration_fields &&
+          provider == o.provider &&
+          revisions == o.revisions
     end
 
     # @see the `==` method
@@ -310,7 +324,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, remote_id, title, description, url, remote_created_at, skills, ordered_content, changed_at, remote_deleted_at, remote_data].hash
+      [id, remote_id, provider_id, remote_created_at, remote_deleted_at, changed_at, remote_data, custom_fields, integration_fields, provider, revisions].hash
     end
 
     # Builds the object from hash

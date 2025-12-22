@@ -24,6 +24,7 @@
 | **recruitee** | [**PostAtsCandidatesRequestBodyRemoteFieldsAllOfRecruitee**](PostAtsCandidatesRequestBodyRemoteFieldsAllOfRecruitee.md) |  | [optional] |
 | **umantis** | [**PostAtsCandidatesRequestBodyRemoteFieldsAllOfUmantis**](PostAtsCandidatesRequestBodyRemoteFieldsAllOfUmantis.md) |  | [optional] |
 | **piloga** | [**PostAtsCandidatesRequestBodyRemoteFieldsAllOfPiloga**](PostAtsCandidatesRequestBodyRemoteFieldsAllOfPiloga.md) |  | [optional] |
+| **pinpoint** | [**PostAtsCandidatesRequestBodyRemoteFieldsAllOfPinpoint**](PostAtsCandidatesRequestBodyRemoteFieldsAllOfPinpoint.md) |  | [optional] |
 
 ## Example
 
@@ -50,7 +51,8 @@ instance = Kombo::PostAtsCandidatesRequestBodyRemoteFields.new(
   avature: null,
   recruitee: null,
   umantis: null,
-  piloga: null
+  piloga: null,
+  pinpoint: null
 )
 ```
 

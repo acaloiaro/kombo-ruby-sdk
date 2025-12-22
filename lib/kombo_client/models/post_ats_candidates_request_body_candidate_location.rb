@@ -23,6 +23,8 @@ module Kombo
 
     attr_accessor :state
 
+    attr_accessor :street_1
+
     attr_accessor :zip_code
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -31,6 +33,7 @@ module Kombo
         :'city' => :'city',
         :'country' => :'country',
         :'state' => :'state',
+        :'street_1' => :'street_1',
         :'zip_code' => :'zip_code'
       }
     end
@@ -51,6 +54,7 @@ module Kombo
         :'city' => :'String',
         :'country' => :'String',
         :'state' => :'String',
+        :'street_1' => :'String',
         :'zip_code' => :'String'
       }
     end
@@ -89,6 +93,10 @@ module Kombo
 
       if attributes.key?(:'state')
         self.state = attributes[:'state']
+      end
+
+      if attributes.key?(:'street_1')
+        self.street_1 = attributes[:'street_1']
       end
 
       if attributes.key?(:'zip_code')
@@ -145,6 +153,7 @@ module Kombo
           city == o.city &&
           country == o.country &&
           state == o.state &&
+          street_1 == o.street_1 &&
           zip_code == o.zip_code
     end
 
@@ -157,7 +166,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [city, country, state, zip_code].hash
+      [city, country, state, street_1, zip_code].hash
     end
 
     # Builds the object from hash

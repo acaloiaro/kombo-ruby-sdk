@@ -15,25 +15,12 @@ require 'time'
 
 module Kombo
   class PostLmsCoursesRequestBody < ApiModelBase
-    # The title of the course
-    attr_accessor :title
-
-    # A description of the course
-    attr_accessor :description
-
-    # URL where the course can be accessed
-    attr_accessor :url
-
-    # Skills that will be taught in this course
-    attr_accessor :skills
+    attr_accessor :course
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'title' => :'title',
-        :'description' => :'description',
-        :'url' => :'url',
-        :'skills' => :'skills'
+        :'course' => :'course'
       }
     end
 
@@ -50,18 +37,13 @@ module Kombo
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'title' => :'String',
-        :'description' => :'String',
-        :'url' => :'String',
-        :'skills' => :'Array<PostLmsCoursesRequestBodySkillsInner>'
+        :'course' => :'PostLmsCoursesRequestBodyCourse'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'description',
-        :'url',
       ])
     end
 
@@ -81,24 +63,10 @@ module Kombo
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
+      if attributes.key?(:'course')
+        self.course = attributes[:'course']
       else
-        self.title = nil
-      end
-
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
-      end
-
-      if attributes.key?(:'url')
-        self.url = attributes[:'url']
-      end
-
-      if attributes.key?(:'skills')
-        if (value = attributes[:'skills']).is_a?(Array)
-          self.skills = value
-        end
+        self.course = nil
       end
     end
 
@@ -107,8 +75,8 @@ module Kombo
     def list_invalid_properties
       warn '[DEPRECATED] the `list_invalid_properties` method is obsolete'
       invalid_properties = Array.new
-      if @title.nil?
-        invalid_properties.push('invalid value for "title", title cannot be nil.')
+      if @course.nil?
+        invalid_properties.push('invalid value for "course", course cannot be nil.')
       end
 
       invalid_properties
@@ -118,18 +86,18 @@ module Kombo
     # @return true if the model is valid
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
-      return false if @title.nil?
+      return false if @course.nil?
       true
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] title Value to be assigned
-    def title=(title)
-      if title.nil?
-        fail ArgumentError, 'title cannot be nil'
+    # @param [Object] course Value to be assigned
+    def course=(course)
+      if course.nil?
+        fail ArgumentError, 'course cannot be nil'
       end
 
-      @title = title
+      @course = course
     end
 
     # Checks equality by comparing each attribute.
@@ -137,10 +105,7 @@ module Kombo
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          title == o.title &&
-          description == o.description &&
-          url == o.url &&
-          skills == o.skills
+          course == o.course
     end
 
     # @see the `==` method
@@ -152,7 +117,7 @@ module Kombo
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title, description, url, skills].hash
+      [course].hash
     end
 
     # Builds the object from hash
