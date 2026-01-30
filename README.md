@@ -1,10 +1,10 @@
-# Kombo.dev Ruby SDK Generator
+# Kombo.dev Ruby SDK 
 
-This experimental repository generates a Ruby SDK from [Kombo's OpenAPI spec](https://api.kombo.dev/openapi.json).
+This is a Ruby SDK from [Kombo's OpenAPI spec](https://api.kombo.dev/openapi.json).
 
-This is not production-ready.
+## Generate SDK
 
-## Generate code
+The SDK is generated from OpenAPI specifications.
 
 This repo uses a nix [devenv](devenv.sh) to generate code. With `direnv` installed, run `direnv allow` inside of this
 repository directory to enable the devenv.

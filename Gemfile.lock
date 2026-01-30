@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kombo_client (0.0.3)
+    kombo_client (0.0.5)
       typhoeus (~> 1.0, >= 1.0.1)
 
 GEM
