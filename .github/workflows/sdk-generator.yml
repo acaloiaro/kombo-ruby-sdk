@@ -1,0 +1,147 @@
+name: Devenv SDK Generator
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # daily at 06:00 UTC (adjust if needed)
+  workflow_dispatch:
+
+permissions:
+  contents: write    # push commits & tags, create releases
+  packages: write    # publish packages to GitHub Packages
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Nix (enable flakes)
+        uses: cachix/install-nix-action@v22
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Run SDK generator (nix run .#generate-sdk)
+        id: generate
+        run: |
+          set -euo pipefail
+          # Run the generator defined in flake.nix
+          nix run .#generate-sdk
+
+      - name: Determine new version (if any)
+        id: version
+        run: |
+          set -euo pipefail
+          # Expect generator to write a VERSION file containing the new version.
+          if [ -f VERSION ]; then
+            NEW_VERSION="$(cat VERSION | tr -d '[:space:]')"
+            echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "new_version=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Detect uncommitted changes
+        id: detect_changes
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+          # find the most recently created local tag (if any)
+          TAG="$(git for-each-ref --sort=-creatordate --format '%(refname:strip=2)' refs/tags | head -n1 || true)"
+          if [ -n "$TAG" ]; then
+            echo "local_tag=$TAG" >> $GITHUB_OUTPUT
+          else
+            echo "local_tag=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit generated files and push (if changed)
+        if: steps.detect_changes.outputs.changed == 'true'
+        env:
+          TARGET_BRANCH: main
+        run: |
+          set -euo pipefail
+
+          # Ensure we have the new version, or re-read from VERSION
+          if [ -z "${{ steps.version.outputs.new_version }}" ]; then
+            if [ -f VERSION ]; then
+              NEW_VERSION="$(cat VERSION | tr -d '[:space:]')"
+            else
+              echo "ERROR: VERSION file not found; cannot determine new version." >&2
+              exit 1
+            fi
+          else
+            NEW_VERSION="${{ steps.version.outputs.new_version }}"
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Commit changes produced by the generator (gems, lib changes, VERSION, etc.)
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No staged changes to commit"
+          else
+            git commit -m "chore: regenerate SDK from OpenAPI ${NEW_VERSION}"
+            # Create an annotated tag on the commit referencing the new version.
+            # Remove any pre-existing local tag of the same name (the generator may have created a tag earlier).
+            git tag -d "${NEW_VERSION}" 2>/dev/null || true
+            git tag -a "${NEW_VERSION}" -m "Bump version: ${NEW_VERSION}"
+            # Push commit and tag to main
+            git push origin "HEAD:${TARGET_BRANCH}"
+            git push origin "refs/tags/${NEW_VERSION}"
+          fi
+
+      - name: Create GitHub release for the new tag (if tag exists)
+        if: steps.version.outputs.new_version != ''
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.new_version }}
+          release_name: "SDK ${{ steps.version.outputs.new_version }}"
+          body: "Automated SDK generation from OpenAPI spec, version ${{ steps.version.outputs.new_version }}."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build gem artifact (if gemspec present)
+        if: steps.detect_changes.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          GEMSPEC="$(ls *.gemspec 2>/dev/null | head -n1 || true)"
+          if [ -z "$GEMSPEC" ]; then
+            echo "No gemspec found; skipping gem build/publish."
+            exit 0
+          fi
+          gem build "$GEMSPEC"
+          # move built gem(s) to a temp dir for publishing
+          mkdir -p pkg
+          mv *.gem pkg/ || true
+          ls -la pkg
+
+      - name: Publish gem(s) to GitHub Packages (grnhse)
+        if: steps.detect_changes.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ ! -d pkg ]; then
+            echo "No built gem(s) in pkg/; skipping publish."
+            exit 0
+          fi
+          # Configure credentials for gem push to GitHub Packages
+          mkdir -p ~/.gem
+          # Use GITHUB_TOKEN as the rubygems API key for GitHub Packages.
+          # Host for organization 'grnhse' is: https://rubygems.pkg.github.com/grnhse
+          printf '%s\n' '---' ":rubygems_api_key: $GITHUB_TOKEN" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+
+          for g in pkg/*.gem; do
+            echo "Publishing $g to GitHub Packages (grnhse)..."
+            gem push --host https://rubygems.pkg.github.com/grnhse "$g"
+          done
