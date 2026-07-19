@@ -1,3 +1,5 @@
+**NOTICE**: This repository has been moved to [https://code.adriano.fyi/me/kombo-ruby-sdk](https://code.adriano.fyi/me/kombo-ruby-sdk). Microsoft has shown little interest in stewarding what was once the best and largest open source community. This small act of migration is my way showing that we don't all support Microsoft's disinterest.
+
 # Kombo.dev Ruby SDK 
 
 This is a Ruby SDK from [Kombo's OpenAPI spec](https://api.kombo.dev/openapi.json).
